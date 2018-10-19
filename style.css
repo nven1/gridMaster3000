@@ -1,0 +1,47 @@
+.wrapper {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+
+    background-color: rgb(226, 226, 226);
+
+    display: grid;
+    grid-template-columns: 20% 5% 70% 5%;
+    grid-template-rows: 5% 90% 5%;
+
+
+}
+.editor {
+    grid-area: 1/1/4/1;
+
+    background-color: rgb(199, 199, 199);
+    padding: 50px;
+
+    
+
+}
+.window {
+    grid-area: 2/3/2/3;
+
+    background-color: rgb(243, 243, 243);
+
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 100%;
+    
+
+
+
+
+
+/*     display: flex;
+    align-items: center;
+    justify-content: center; */
+
+    font-size: 2em;
+}
+
