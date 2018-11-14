@@ -41,3 +41,7 @@
 
     background-color: var(--backColor);
 }
+
+.elementSelectClass {
+    background-color: red !important;
+}

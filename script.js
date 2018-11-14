@@ -1,11 +1,12 @@
 $(document).ready(function(){
 
     $(".z0id0").ready(function productController() {
-        var mainGridRowCount = 15;
-        var mainGridColumnCount = 15;
+        var mainGridRowCount = 5;
+        var mainGridColumnCount = 10;
         var selectedElement = null;
         var mousedown=false;
         var list=[];
+        var alreadyInList = false;
         createGrid()
 
         $( "#backColorBlack" ).click(function() {
@@ -17,8 +18,12 @@ $(document).ready(function(){
         $( "#backColorGrey" ).click(function() {
             console.log(this);
             changeBackgroundColor(selectedElement, 'grey');
-        });
-   
+        });   
+        $( "#resetSelection" ).click(function() {
+            $(".z0id0 div").removeClass("elementSelectClass");
+            list=[];
+            
+        });   
 
 /*         $(".z0id0 div").on('mouseenter',function(){
             if (selectedElement!=null) {
@@ -38,16 +43,25 @@ $(document).ready(function(){
         }) */
 
         $(".z0id0 div").on('mousedown',function(){
-            list=[];
+            
+
             mousedown = true;
             selectedElement = this.id;
-            list.push(selectedElement);
+
+            if (list.includes(selectedElement) === false) {
+                $(this).addClass("elementSelectClass");
+                list.push(selectedElement);
+            }
+            
             
         })
         $(".z0id0 div").on('mouseover',function(){
             if(mousedown) {
                 selectedElement = this.id;
-                list.push(selectedElement);
+                if (list.includes(selectedElement) === false) {
+                    $(this).addClass("elementSelectClass");
+                    list.push(selectedElement);
+                }
             }
         })
         $(".z0id0 div").on('mouseup',function(){
@@ -56,19 +70,18 @@ $(document).ready(function(){
         })
         $(".z0id0 div").disableSelection();
 
-        
-
         function changeBackgroundColor(element, color) {
             $("#"+element).get(0).style.setProperty("background-color", color);
         }
+        
         /*
         dobiti broj r i c i dobiti element
         generirati
         */
         function createGrid() {
     
-            $(".z0id0").get(0).style.setProperty("grid-template-columns", mainGridColumnCount*"1fr ");
-            $(".z0id0").get(0).style.setProperty("grid-template-rows", mainGridRowCount*"1fr ");
+            $(".z0id0").get(0).style.setProperty("grid-template-columns", mainGridColumnCount*" 1vh");
+            $(".z0id0").get(0).style.setProperty("grid-template-rows", mainGridRowCount*" 1vh");
             for (var r = 1; r<=mainGridRowCount; r++) {
                 for (var c = 1; c<=mainGridColumnCount; c++) {
                     $(".z0id0").append("<div id='"+'z1id'+r+c+"' style='background-color: lightgrey; grid-area:"+r+"/"+c+"; border: 1px solid black;'>a</div>")
