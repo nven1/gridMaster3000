@@ -1,12 +1,14 @@
 $(document).ready(function(){
-
-    $(".z0id0").ready(function productController() {
-        var mainGridRowCount = 5;
-        var mainGridColumnCount = 10;
+        var mainGridRowCount = 30;
+        var mainGridColumnCount = 30;
         var selectedElement = null;
         var mousedown=false;
+        var rightClick = false;
         var list=[];
-        var alreadyInList = false;
+        var gridArea;
+        var layer = 1;
+        var layer1Occupied=[];
+
         createGrid()
 
         $( "#backColorBlack" ).click(function() {
@@ -16,85 +18,148 @@ $(document).ready(function(){
             changeBackgroundColor(selectedElement, 'white');
         });
         $( "#backColorGrey" ).click(function() {
-            console.log(this);
             changeBackgroundColor(selectedElement, 'grey');
         });   
-        $( "#resetSelection" ).click(function() {
-            $(".z0id0 div").removeClass("elementSelectClass");
-            list=[];
+        $( "#layerUp" ).on('click', function(){
+            layer++;
+            $(".gridTile").css('z-index', layer);
+            console.log(layer);
             
+        }); 
+        $( "#layerDown" ).on('click', function(){
+            if (layer!=0) {
+                
+                layer--;
+                $(".gridTile").css('z-index', layer);
+            }    
+            console.log(layer);
+            
+        }); 
+        $( "#resetSelection").on('click',resetSelection);
+
+            
+        $("#makeDiv").click(function() {
+            let rowList = [];
+            let colList = [];
+            // get coordinates of selected divs in list and give them to div
+            for (let i=0; i<list.length; i++) {    
+                if (!layer1Occupied.includes(list[i])) {
+                    layer1Occupied.push(list[i]);
+                }
+                else {
+                    console.log("it broke nigga");
+                    break;
+                }
+                
+                let coo = list[i].split("r").pop();
+                let row = coo.split("c").shift();
+                let col = coo.split("c").pop();
+                rowList.push(row);
+                colList.push(col);
+            }
+            // collision check
+/*             for (let i=0; i<rowList.length;i++) {
+
+            } */
+
+            let minRow = Math.min.apply( Math, rowList );
+            let maxRow = Math.max.apply( Math, rowList )+1;
+            let minCol = Math.min.apply( Math, colList );
+            let maxCol = Math.max.apply( Math, colList )+1;
+            gridArea = minRow+'/'+minCol+'/'+maxRow+'/'+maxCol
+            createDiv(gridArea);
+            console.log(layer1Occupied);
         });   
-
-/*         $(".z0id0 div").on('mouseenter',function(){
-            if (selectedElement!=null) {
-                $("#"+selectedElement).get(0).style.setProperty("outline", "none");
-            }
-            var previousItem = selectedElement;
+        $(".main div").on('mousedown',function(){
             selectedElement = this.id;
-            list.push(selectedElement);
-
-            if (previousItem==this.id) {
-                $("#"+selectedElement).get(0).style.setProperty("outline", "none");
-            } else {             
-                $(this).get(0).style.setProperty("outline-offset", "-2px");
-                $(this).get(0).style.setProperty("outline", "2px solid black");
+            switch (event.which) {
+                case 1:
+                    mousedown = true;
+                    if (list.includes(selectedElement) === false) {
+                        $(this).addClass("elementSelectClass");
+                        console.log("a");
+                        list.push(selectedElement);
+                    }
+                    break;
+                case 3:
+                    rightClick = true;
+                    if (list.includes(selectedElement) === true) {
+                        $(this).removeClass("elementSelectClass");
+                        list = list.filter(item => item !== selectedElement); 
+                    }
+                    break;
             }
-            console.log(list);
-        }) */
-
-        $(".z0id0 div").on('mousedown',function(){
-            
-
-            mousedown = true;
-            selectedElement = this.id;
-
-            if (list.includes(selectedElement) === false) {
-                $(this).addClass("elementSelectClass");
-                list.push(selectedElement);
-            }
-            
-            
         })
-        $(".z0id0 div").on('mouseover',function(){
+        $(".main div").on('mouseover',function(){
+            selectedElement = this.id;
             if(mousedown) {
-                selectedElement = this.id;
                 if (list.includes(selectedElement) === false) {
                     $(this).addClass("elementSelectClass");
                     list.push(selectedElement);
                 }
             }
+            else if (rightClick) {
+                console.log("eyyy");
+                if (list.includes(selectedElement) === true) {
+                    
+                    $(this).removeClass("elementSelectClass");
+                    list = list.filter(item => item !== selectedElement); 
+                }
+            }
         })
-        $(".z0id0 div").on('mouseup',function(){
+
+        $(document).on('mouseup',function(){
+            switch (event.which) {
+                case 1:
+                    mousedown = false;
+                    list.sort();
+                    break;
+                case 3:
+                    rightClick = false;
+                    list.sort();
+                    console.log("eyy");
+                    break;
+            }
+
+        })
+
+        $(document).on('mousedown','.userMade',function(){
+            selectedElement = this.id;
+            
+        })
+        $(document).on('mouseup',function(){
             mousedown = false;
+            list.sort();
             console.log(list);
         })
-        $(".z0id0 div").disableSelection();
+
+        $(".main div").disableSelection();
 
         function changeBackgroundColor(element, color) {
             $("#"+element).get(0).style.setProperty("background-color", color);
         }
-        
-        /*
-        dobiti broj r i c i dobiti element
-        generirati
-        */
+        function Div(gridArea, z,  id) {
+           this.gridArea = gridArea;
+           this.id = id;
+           this.z = z;
+        }
         function createGrid() {
-    
-            $(".z0id0").get(0).style.setProperty("grid-template-columns", mainGridColumnCount*" 1vh");
-            $(".z0id0").get(0).style.setProperty("grid-template-rows", mainGridRowCount*" 1vh");
+            $(".main").get(0).style.setProperty("grid-template-columns", mainGridColumnCount*"1fr ");
+            $(".main").get(0).style.setProperty("grid-template-rows", mainGridRowCount*"1fr ");
             for (var r = 1; r<=mainGridRowCount; r++) {
                 for (var c = 1; c<=mainGridColumnCount; c++) {
-                    $(".z0id0").append("<div id='"+'z1id'+r+c+"' style='background-color: lightgrey; grid-area:"+r+"/"+c+"; border: 1px solid black;'>a</div>")
+                    $(".main").append("<div id='r"+r+"c"+c+"' class='gridTile' style='background-color: #ffffff00; grid-area:"+r+"/"+c+"; border: 1px solid #00000010;'></div>")
                 }
             }
-    
         }
-
-        
-        
-    });
-
-
-
-    
+        function createDiv(gridArea) {
+            $(".main").append("<div class='userMade' style='grid-area:"+gridArea+"; z-index:"+layer+"; background-color:#555; border-radius: 10px;'></div>")
+            resetSelection();
+            list=[];
+            gridArea=null;
+        }
+        function resetSelection() {
+            $(".main div").removeClass("elementSelectClass");
+            list=[];
+        }
 });
