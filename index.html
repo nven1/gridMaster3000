@@ -24,10 +24,19 @@
             <button id="makeDiv">makeDiv</button>
             <button id="layerUp">layerUp</button>
             <button id="layerDown">layerDown</button>
+            <span id="currentLayer"></span>
+            <h3>Current Element</h3>
+            <span id="elementLayer">Layer: -</span> <br>
+            <span id="elementBackColor">Background Color: -</span> <br>
+            <span id="elementColor">Text Color: - </span> <br>
         </div>
 
         <div class="workspace" oncontextmenu="return false">
-            <div class="main"></div>
+            <div class="topRuler"></div>
+            <div class="leftRuler"></div>
+            <div class="main">
+                <div id="temp" style="display:none; background-color: rgba(51, 51, 51, 0.5)"></div>
+            </div>
         </div>
         
     </div>

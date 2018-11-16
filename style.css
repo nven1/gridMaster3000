@@ -25,25 +25,65 @@
     grid-template-rows: 1fr 20fr 1fr;
     overflow-y: scroll;
 }
-
+/* GRID */
 .main {
     grid-area: 2/2;
-    box-shadow: 10px;
+    background-color: white;
     box-shadow: 0px 0px 20px -2px rgba(0,0,0,0.2);
-    overflow: visible;
-    height: auto;
-    /* User CSS */
     display: grid;
-/*     --mainColumnCount: 1;
-    --mainGridRowCount: 1; */
-
-
-    --backColor: #fff;
-
-    background-color: var(--backColor);
+    
+    min-width: 0;
+    min-height: 0;
 }
+.userMade {
+    overflow: hidden;
+    min-width: 0;
+    min-height: 0;
+}
+.gridTile {
+    overflow: hidden;
+    min-width: 0;
+    min-height: 0;
+}
+/* GRID */
+/* RULERS */
+.topRuler {
+    grid-area: 1/2;
+    display: grid;
+    grid-template-rows: 1fr;
+    background-color: rgb(0, 0, 0, 0);
+}
+.leftRuler {
+    grid-area: 2/1;
+    display: grid;
+    grid-template-columns: 1fr;
+    background-color: rgb(0, 0, 0, 0);
+}
+.rulerLeftNumber {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    text-align: right;
+    font-size: 0.8em;
+    padding-right: 0.5vh;
+    color: rgba(53, 53, 53, 0.5);
+}
+.rulerTopNumber {
+    /* padding: 0.5vw; */
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    text-align: center;
+    font-size: 0.8em;
+    padding-bottom: 0.5vh;
+    color: rgba(53, 53, 53, 0.5);
+}
+/* RULERS */
 
+/* SELECT */
 .elementSelectClass {
     background-color: red !important;
     z-index: 9999 !important;
 }
+/* SELECT */
+
