@@ -1,21 +1,20 @@
 $(document).ready(function(){
-        var mainGridRowCount = 40;
-        var mainGridColumnCount = 40;
+        var mainGridRowCount = 50;
+        var mainGridColumnCount = 50;
         var selectedElement = null;
         var mousedown=false;
         var rightClick = false;
         var list=[];
-        var gridArea;
         var layer = 1;
-        var layer1Occupied=[]
         var selectedGridArea;
         var selectedGridAreaFirst;
-        var selectedGridAreaLast;
+        var divID=0;
 
         createGrid()
         $("#currentLayer").text(layer);
 
         $( "#backColorBlack" ).click(function() {
+            console.log(selectedElement);
             changeBackgroundColor(selectedElement, 'black');
         });
         $( "#backColorWhite" ).click(function() {
@@ -78,6 +77,7 @@ $(document).ready(function(){
         });   
         $(".main div").on('mousedown',function(){
             selectedElement = this.id;
+            console.log(selectedElement);
             switch (event.which) {
                 case 1:
                     mousedown = true;
@@ -95,8 +95,9 @@ $(document).ready(function(){
             }
         })
         $(".main div").on('mouseover',function(){
-            selectedElement = this.id;
+            
             if(mousedown) {
+                selectedElement = this.id;
                 //let coo = this.id.split("r").pop();
                 let row = Number(this.id.split("r").pop().split("c").shift());
                 let col = Number(this.id.split("r").pop().split("c").pop());
@@ -105,6 +106,7 @@ $(document).ready(function(){
                 showSelectionGrid(selectedGridAreaFirst+row+'/'+col);
             }
             else if (rightClick) {
+                selectedElement = this.id;
                 console.log("eyyy");
                 if (list.includes(selectedElement) === true) {
                     
@@ -131,6 +133,7 @@ $(document).ready(function(){
 
         $(document).on('mousedown','.userMade',function(){
             selectedElement = this.id;
+            console.log(selectedElement);
             $("#elementLayer").text("Layer: "+$(this).css('z-index'))
             $("#elementBackColor").text("Background Color: "+$(this).css('background-color'))
             $("#elementColor").text("Text Color: "+$(this).css('color'))
@@ -147,6 +150,7 @@ $(document).ready(function(){
 
         function changeBackgroundColor(element, color) {
             $("#"+element).get(0).style.setProperty("background-color", color);
+            console.log(element);
         }
         function Div(gridArea, z,  id) {
            this.gridArea = gridArea;
@@ -154,23 +158,28 @@ $(document).ready(function(){
            this.z = z;
         }
         function createGrid() {
-            $(".main").get(0).style.setProperty("grid-template-columns", mainGridColumnCount*"minmax(0, 1fr) ");
-            $(".main").get(0).style.setProperty("grid-template-rows", mainGridRowCount*"minmax(0, 1fr) ");
-            $(".topRuler").get(0).style.setProperty("grid-template-columns", 'repeat('+mainGridColumnCount+', 1fr)');
-            $(".leftRuler").get(0).style.setProperty("grid-template-rows", 'repeat('+mainGridRowCount+', 1fr)');
+            $(".main").get(0).style.setProperty("grid-template-columns", 'repeat(auto-fill, minmax(1vw, 1fr))');
+            $(".main").get(0).style.setProperty("grid-template-rows", 'repeat(auto-fill, minmax(1vw, 1fr))');
+            console.log($(".main").css("grid-column-end"));
+            console.log($(".main").css("grid-auto-flow"));
+            //$(".main").get(0).style.setProperty("grid-template-rows", 'repeat('+mainGridRowCount+', 1vw)');
+           // $(".topRuler").get(0).style.setProperty("grid-template-columns", 'repeat('+mainGridColumnCount+', 1vw)');
+     //       $(".leftRuler").get(0).style.setProperty("grid-template-rows", 'repeat('+mainGridRowCount+', 1vw)');
             
-            for (var r = 1; r<=mainGridRowCount; r++) {
-                $(".leftRuler").append("<span id='rulerLeft"+r+"' class='rulerLeftNumber' style='grid-area:"+r+"/1; z-index:1'>"+r+"</span>")
-                for (var c = 1; c<=mainGridColumnCount; c++) {
+            for (var r = 1; r<=45; r++) {
+                //$(".leftRuler").append("<span id='rulerLeft"+r+"' class='rulerLeftNumber' style='grid-area:"+r+"/1; z-index:1'>"+r+"</span>")
+                for (var c = 1; c<=71; c++) {
                     $(".main").append("<div id='r"+r+"c"+c+"' class='gridTile' style='background-color: #ffffff00; grid-area:"+r+"/"+c+"; border: 1px solid #00000010; z-index:1'></div>")
                 }
             }
-            for (var c = 1; c<=mainGridColumnCount; c++) {
-                $(".topRuler").append("<span  id='rulerTop"+c+"'  class='rulerTopNumber'  style='grid-area:1/"+c+"; z-index:1'>"+c+"</span>")            }
+/*             for (var c = 1; c<=mainGridColumnCount; c++) {
+                $(".topRuler").append("<span  id='rulerTop"+c+"'  class='rulerTopNumber'  style='grid-area:1/"+c+"; z-index:1'>"+c+"</span>")            
+            } */
         }
         function createDiv() {
-            $(".main").append("<div class='userMade' style='grid-area:"+selectedGridArea+"; z-index:"+layer+"; background-color:#"+layer+"aa; border-radius: 2px; color:#fff;'>"+layer+"</div>")
-            
+            $(".main").append("<div class='userMade' id=divId"+divID+" style='grid-area:"+selectedGridArea+"; z-index:"+layer+"; background-color:#"+layer+"aa; border-radius: 2px; color:#fff;'></div>")
+            selectedElement = "divId"+divID;
+            divID++;
         }
         function showSelectionGrid(gridArea) {
             $("#temp").css("grid-area",gridArea);
